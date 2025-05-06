@@ -20,7 +20,8 @@
             on your machine.</p>
         </div>
         <form id="custom-form">
-            <input type="text" id="name" placeholder="Enter your name" required>
+            <input type="text" id="firstName" placeholder="Enter your first name" required>
+            <input type="text" id="lastName" placeholder="Enter your last name" required>
             <input type="text" id="query" placeholder="Enter postcode" required>
             <button type="submit">Submit</button>
         </form>
@@ -57,7 +58,11 @@
             'james.royston@lewisham.gov.uk': picMemberEmailBodyTempalte,
             'liam.shrivastava@lewisham.gov.uk': picMemberEmailBodyTempalte
         }
-        
+        function getFullName() {
+            const firstName = $('#firstName').val().trim();
+            const lastName = $('#lastName').val().trim();
+            return `${firstName} ${lastName}`;
+        }
         function getEmailBody(councillor, ward, signee) {
             var emailBodyTemplate = emailBodyTemplateOverride[councillor.email.toLowerCase()] || defaultEmailBodyTemplate;
             
@@ -139,7 +144,7 @@
         $('#custom-form').on('submit', function(event) {
             event.preventDefault();
 
-            var name = $('#name').val();
+            var name = getFullName();
             var query = $('#query').val();
             var url = 'https://script.google.com/macros/s/AKfycbzN7FhBAz0U4Kl3PnpFI79_NsnM4cfLHZsDIAz2_zcWBsXs1sPkDUF0Z6OTA8zA4Tkb/exec?postcode=' + encodeURIComponent(query);
 
