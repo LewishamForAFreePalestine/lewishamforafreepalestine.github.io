@@ -59,8 +59,6 @@
             'liam.shrivastava@lewisham.gov.uk': picMemberEmailBodyTempalte
         }
         function getFullName() {
-            const firstName = $('#firstName').val().trim();
-            const lastName = $('#lastName').val().trim();
             return `${firstName} ${lastName}`;
         }
         function getEmailBody(councillor, ward, signee) {
@@ -70,8 +68,13 @@
                 .replace(encodeURIComponent(wardToken), encodeURIComponent(ward))
                 .replace(encodeURIComponent(signeeToken),  encodeURIComponent(signee));
         }
-        
-        function generateLinks(councillors, ward, name) {
+
+        function generateMailingListUrl(firstname, lastname, ward) {
+           return `https://tinyurl.us15.list-manage.com/subscribe?u=9818ca931e429fb5e27237ebe&id=9739e46cf0&FNAME=${encodeURIComponent(firstname)}&LNAME=${encodeURIComponent(lastname)}&WARD=${encodeURIComponent(ward)}`;
+        }
+
+        function generateLinks(councillors, ward, firstname, lastname) {
+            const name = getFullName(firstname, lastname);
             let html = '';
         
             // First show the regular links with full mailto
@@ -87,6 +90,7 @@
                         Email ${councillor.name}
                     </a>`;
             });
+            html += `<p>Click <a target="_blank" href="${generateMailingListUrl(firstname,lastname,ward)}" id="mailingListLink">here</a> to join our mailing list and stay updated on our campaign.</p>`;
             html += '</div>';
         
             // Fallback section remains the same
@@ -144,7 +148,8 @@
         $('#custom-form').on('submit', function(event) {
             event.preventDefault();
 
-            var name = getFullName();
+            const firstname = $('#firstName').val().trim();
+            const lastname = $('#lastName').val().trim();
             var query = $('#query').val();
             var url = 'https://script.google.com/macros/s/AKfycbzN7FhBAz0U4Kl3PnpFI79_NsnM4cfLHZsDIAz2_zcWBsXs1sPkDUF0Z6OTA8zA4Tkb/exec?postcode=' + encodeURIComponent(query);
 
@@ -161,7 +166,7 @@
                 if (!ward) {
                     resultHtml = '<p>We could not find the postcode in our database.</p><p>This tool only works with postcodes in the London Borough of Lewisham, please ensure you entered a valid Lewisham postcode.</p>';
                 } else {
-                    resultHtml = generateLinks(councillors, ward, name);
+                    resultHtml = generateLinks(councillors, ward, firstname, lastname);
                 }
             
                 // Hide the loading spinner and show the result
