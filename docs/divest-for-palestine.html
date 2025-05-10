@@ -58,8 +58,8 @@
             'james.royston@lewisham.gov.uk': picMemberEmailBodyTempalte,
             'liam.shrivastava@lewisham.gov.uk': picMemberEmailBodyTempalte
         }
-        function getFullName() {
-            return `${firstName} ${lastName}`;
+        function getFullName(firstname, lastname) {
+            return `${firstname} ${lastname}`;
         }
         function getEmailBody(councillor, ward, signee) {
             var emailBodyTemplate = emailBodyTemplateOverride[councillor.email.toLowerCase()] || defaultEmailBodyTemplate;
@@ -74,7 +74,7 @@
         }
 
         function generateLinks(councillors, ward, firstname, lastname) {
-            const name = getFullName(firstname, lastname);
+            const fullname = getFullName(firstname, lastname);
             let html = '';
         
             // First show the regular links with full mailto
@@ -84,7 +84,7 @@
             // Simple list of email links
             html += '<div class="councillor-links">';
             councillors.forEach(function(councillor) {
-                var emailBody = getEmailBody(councillor, ward, name);
+                var emailBody = getEmailBody(councillor, ward, fullname);
                 html += `<a class="councillor-link" target="_blank" 
                         href="mailto:${councillor.email}?bcc=info@lewishampsc.org&subject=Liam's removal - and still no divestment!&body=${emailBody}">
                         Email ${councillor.name}
