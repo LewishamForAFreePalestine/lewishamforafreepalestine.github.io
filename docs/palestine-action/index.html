@@ -87,6 +87,31 @@
                     $('#resultModal').hide();
                 }
             });
+
+            // Toggle MP actions in fallback section
+            $(document).on('click', '.mp-name', function() {
+                const mpId = $(this).data('mp-id');
+                const actionsId = `#actions-${mpId}`;
+                $(actionsId).slideToggle(200);
+                $(this).toggleClass('toggle-active');
+            });
+
+            // Copy email text to clipboard
+            $(document).on('click', '.copy-email-btn', function() {
+                const emailText = $(this).data('email');
+
+                navigator.clipboard.writeText(emailText)
+                    .then(() => {
+                        // Change button text temporarily
+                        const $btn = $(this);
+                        const originalText = $btn.text();
+                        $btn.text('Copied! ✓');
+                        setTimeout(() => $btn.text(originalText), 2000);
+                    })
+                    .catch(err => {
+                        alert('Could not copy email text: ' + err);
+                    });
+            });
         });
         
         async function searchMPs(postcode, firstName, lastName) {
@@ -175,19 +200,19 @@
             const postcode = $('#query').val().trim();
             const streetAddress= $('#streetAddress').val().trim();
             const city = $('#city').val().trim();
-            const phoneNumber = $('#phoneNumber ').val().trim();
+            const phoneNumber = $('#phoneNumber').val().trim();
             let html = '<h2>Your MPs:</h2>';
-            
+
             mpResults.forEach(({ mp, email }) => {
                 const mpName = mp.nameDisplayAs;
                 const constituency = mp.latestHouseMembership ? mp.latestHouseMembership.membershipFrom : 'Unknown';
                 const party = mp.latestParty ? mp.latestParty.name : 'Unknown';
-                
+
                 html += `<div class="mp-result">`;
                 html += `<h3>${mpName}</h3>`;
                 html += `<p><strong>Constituency:</strong> ${constituency}</p>`;
                 html += `<p><strong>Party:</strong> ${party}</p>`;
-                
+
                 if (email) {
                     // Create email body by replacing tokens
                     let emailBody = defaultEmailBodyTemplate
@@ -198,20 +223,83 @@
                         .replace(new RegExp(cityToken, 'g'), encodeURIComponent(city))
                         .replace(new RegExp(phoneNumberToken, 'g'), encodeURIComponent(phoneNumber))
                         .replace(new RegExp(postcodeToken, 'g'), encodeURIComponent(postcode));
-                    
+
                     const subject = encodeURIComponent(`EMERGENCY: Stop the Terrorist Designation of Palestine Action`);
                     const mailtoLink = `mailto:${email}?subject=${subject}&body=${emailBody}`;
-                    
+
                     html += `<p><strong>Email:</strong> ${email}</p>`;
                     html += `<p><a href="${mailtoLink}" class="email-link">📧 Send Email to ${mpName}</a></p>`;
                 } else {
                     html += `<p><strong>Email:</strong> Not available</p>`;
                 }
-                
+
                 html += `</div><hr>`;
             });
-            
+
+            // Add fallback section for email clients with limitations
+            html += `<div class="fallback-section">
+                <h2>Having trouble with email links?</h2>
+                <p>Some email clients have limitations with long email bodies. If the links above don't work correctly, use the alternative method below:</p>
+
+                <div class="fallback-instructions">
+                    <ol>
+                        <li><strong>Step 1:</strong> Click an MP's name below</li>
+                        <li><strong>Step 2:</strong> Click "Copy email text" to copy the full message</li>
+                        <li><strong>Step 3:</strong> Click "Open email" to launch your email program</li>
+                        <li><strong>Step 4:</strong> Paste the copied text into the email body and send</li>
+                    </ol>
+                </div>
+
+                <div class="fallback-mps">`;
+
+            mpResults.forEach(({ mp, email }) => {
+                if (email) {
+                    const mpName = mp.nameDisplayAs;
+                    const constituency = mp.latestHouseMembership ? mp.latestHouseMembership.membershipFrom : 'Unknown';
+
+                    // Create email body text for copying (decoded for display)
+                    let emailBody = defaultEmailBodyTemplate
+                        .replace(new RegExp(mpNameToken, 'g'), encodeURIComponent(mpName))
+                        .replace(new RegExp(constituencyToken, 'g'), encodeURIComponent(constituency))
+                        .replace(new RegExp(signeeToken, 'g'), encodeURIComponent(signee))
+                        .replace(new RegExp(streetAddressToken, 'g'), encodeURIComponent(streetAddress))
+                        .replace(new RegExp(cityToken, 'g'), encodeURIComponent(city))
+                        .replace(new RegExp(phoneNumberToken, 'g'), encodeURIComponent(phoneNumber))
+                        .replace(new RegExp(postcodeToken, 'g'), encodeURIComponent(postcode));
+
+                    const decodedEmailBody = decodeURIComponent(emailBody);
+                    const subject = `EMERGENCY: Stop the Terrorist Designation of Palestine Action`;
+                    const simpleMailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}`;
+
+                    html += `<div class="fallback-mp">
+                        <div class="mp-name" data-mp-id="${mp.id}">
+                            ${mpName} <span class="toggle-icon">▼</span>
+                        </div>
+                        <div class="mp-actions" id="actions-${mp.id}" style="display:none;">
+                            <button class="copy-email-btn" data-email="${escapeHtml(decodedEmailBody)}">
+                                Copy email text
+                            </button>
+                            <a class="email-link" target="_blank" href="${simpleMailtoLink}">
+                                Open email
+                            </a>
+                        </div>
+                    </div>`;
+                }
+            });
+
+            html += `</div></div>`;
+
             $('#result').html(html);
+        }
+
+        // Helper function to escape HTML for data attributes
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
     </script>
 </body>

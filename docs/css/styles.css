@@ -208,14 +208,14 @@ button:hover {
     font-size: 0.9em;
 }
 
-.fallback-councillor {
+.fallback-councillor, .fallback-mp {
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
     overflow: hidden;
 }
 
-.councillor-name {
+.councillor-name, .mp-name {
     padding: 10px 15px;
     background-color: #f0f0f0;
     cursor: pointer;
@@ -238,7 +238,7 @@ button:hover {
     transform: rotate(180deg);
 }
 
-.councillor-actions {
+.councillor-actions, .mp-actions {
     padding: 10px;  /* Reduced padding */
     background-color: white;
     display: flex;
@@ -256,11 +256,19 @@ button:hover {
     overflow-y: auto;
 }
 
-.councillor-links {
+.councillor-links, .mp-result {
     margin-bottom: 30px;
 }
 
 .councillor-link {
     display: block;
     margin-bottom: 8px;
+}
+
+.mp-result {
+    padding-bottom: 15px;
+}
+
+.fallback-mps {
+    margin-top: 20px;
 }
