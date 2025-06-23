@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Your MPs</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <main>
+        <h1>Tell your MPs to support Palestine Action</h1>
+        <div class="explanation">
+            <p>Use this tool to find and contact your local MPs. Enter your postcode 
+            and name, and this tool will provide links that will open a ready to send
+            email using the email client configured on your device.</p>
+        </div>
+        <form id="custom-form">
+            <input type="text" id="firstName" placeholder="Enter your first name" required>
+            <input type="text" id="lastName" placeholder="Enter your last name" required>
+            <input type="text" id="query" placeholder="Enter postcode" required>
+            <button type="submit">Submit</button>
+        </form>
+    </main>
+
+    <!-- Modal structure -->
+    <div id="resultModal">
+        <div id="modalContent">
+            <div id="loading" style="display: none;">
+                <div class="spinner"></div>
+                <div>Loading, please wait...</div>
+            </div>
+            <div id="result"></div>
+            <button id="closeModal">Close</button>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var mpNameToken = '{mpName}';
+        var constituencyToken = '{constituency}';
+        var signeeToken = '{signee}';
+        const defaultEmailBodyTemplate = `Dear%20%7BmpName%7D%2C%0A%0ASpraying%20red%20paint%20is%20not%20%20terrorism.%20Killing%20children%20is%20terrorism.%0A%0AYours%20Sincerely%2C%0A%0A%7Bsignee%7D`;
+
+        $(document).ready(function() {
+            $('#custom-form').on('submit', async function(e) {
+                e.preventDefault();
+                
+                const postcode = $('#query').val().trim();
+                const firstName = $('#firstName').val().trim();
+                const lastName = $('#lastName').val().trim();
+                
+                if (!postcode || !firstName || !lastName) {
+                    alert('Please fill in all fields');
+                    return;
+                }
+                
+                // Show modal and loading
+                $('#resultModal').show();
+                $('#loading').show();
+                $('#result').empty();
+                
+                try {
+                    await searchMPs(postcode, firstName, lastName);
+                } catch (error) {
+                    console.error('Error:', error);
+                    $('#result').html('<p>Error occurred while searching for MPs. Please try again.</p>');
+                } finally {
+                    $('#loading').hide();
+                }
+            });
+            
+            $('#closeModal').on('click', function() {
+                $('#resultModal').hide();
+            });
+            
+            // Close modal when clicking outside
+            $(window).on('click', function(e) {
+                if (e.target.id === 'resultModal') {
+                    $('#resultModal').hide();
+                }
+            });
+        });
+        
+        async function searchMPs(postcode, firstName, lastName) {
+            try {
+                // First API call - search for MPs by postcode
+                const searchUrl = `https://members-api.parliament.uk/api/Members/Search?Location=${encodeURIComponent(postcode)}&skip=0&take=20`;
+                
+                const searchResponse = await fetch(searchUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (!searchResponse.ok) {
+                    throw new Error(`Search API error: ${searchResponse.status}`);
+                }
+                
+                const searchData = await searchResponse.json();
+                
+                if (!searchData.items || searchData.items.length === 0) {
+                    $('#result').html('<p>No MPs found for the given postcode. Please check your postcode and try again.</p>');
+                    return;
+                }
+                
+                // Process each MP found
+                const mpPromises = searchData.items.map(async (item) => {
+                    const mp = item.value;
+                    
+                    // Second API call - get contact details for each MP
+                    const contactUrl = `https://members-api.parliament.uk/api/Members/${mp.id}/Contact`;
+                    
+                    try {
+                        const contactResponse = await fetch(contactUrl, {
+                            method: 'GET',
+                            headers: {
+                                'Accept': 'application/json'
+                            }
+                        });
+                        
+                        if (!contactResponse.ok) {
+                            console.error(`Contact API error for MP ${mp.id}: ${contactResponse.status}`);
+                            return null;
+                        }
+                        
+                        const contactData = await contactResponse.json();
+                        
+                        // Find parliamentary email
+                        let email = null;
+                        if (contactData.value && Array.isArray(contactData.value)) {
+                            const parliamentaryOffice = contactData.value.find(contact => 
+                                contact.type === "Parliamentary office" && contact.email
+                            );
+                            email = parliamentaryOffice ? parliamentaryOffice.email : null;
+                        }
+                        
+                        return {
+                            mp: mp,
+                            email: email
+                        };
+                    } catch (error) {
+                        console.error(`Error fetching contact details for MP ${mp.id}:`, error);
+                        return null;
+                    }
+                });
+                
+                const mpResults = await Promise.all(mpPromises);
+                const validMPs = mpResults.filter(result => result !== null);
+                
+                if (validMPs.length === 0) {
+                    $('#result').html('<p>Unable to retrieve contact information for MPs. Please try again later.</p>');
+                    return;
+                }
+                
+                // Display results
+                displayMPResults(validMPs, firstName, lastName);
+                
+            } catch (error) {
+                console.error('Error in searchMPs:', error);
+                $('#result').html('<p>Error occurred while searching for MPs. Please check your internet connection and try again.</p>');
+            }
+        }
+        
+        function displayMPResults(mpResults, firstName, lastName) {
+            const signee = `${firstName} ${lastName}`;
+            let html = '<h2>Your MPs:</h2>';
+            
+            mpResults.forEach(({ mp, email }) => {
+                const mpName = mp.nameDisplayAs;
+                const constituency = mp.latestHouseMembership ? mp.latestHouseMembership.membershipFrom : 'Unknown';
+                const party = mp.latestParty ? mp.latestParty.name : 'Unknown';
+                
+                html += `<div class="mp-result">`;
+                html += `<h3>${mpName}</h3>`;
+                html += `<p><strong>Constituency:</strong> ${constituency}</p>`;
+                html += `<p><strong>Party:</strong> ${party}</p>`;
+                
+                if (email) {
+                    // Create email body by replacing tokens
+                    let emailBody = defaultEmailBodyTemplate
+                        .replace(new RegExp(mpNameToken, 'g'), encodeURIComponent(mpName))
+                        .replace(new RegExp(constituencyToken, 'g'), encodeURIComponent(constituency))
+                        .replace(new RegExp(signeeToken, 'g'), encodeURIComponent(signee));
+                    
+                    const subject = encodeURIComponent(`Support palestine action`);
+                    const mailtoLink = `mailto:${email}?subject=${subject}&body=${emailBody}`;
+                    
+                    html += `<p><strong>Email:</strong> ${email}</p>`;
+                    html += `<p><a href="${mailtoLink}" class="email-link">📧 Send Email to ${mpName}</a></p>`;
+                } else {
+                    html += `<p><strong>Email:</strong> Not available</p>`;
+                }
+                
+                html += `</div><hr>`;
+            });
+            
+            $('#result').html(html);
+        }
+    </script>
+</body>
+</html>
