@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Don't buy apartheid</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
+        }
+        header {
+            width: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        header img {
+            width: 100%;
+            max-width: 840px;
+            height: auto;
+        }
+        main {
+            max-width: 800px;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .explanation {
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            color: #666;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            max-width: 400px;
+            font-size: 1em;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Modal styling */
+        #resultModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        #modalContent {
+            background: white;
+            padding: 20px;
+            max-width: 500px;
+            width: 90%;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        #closeModal {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+        #closeModal:hover {
+            background: #d32f2f;
+        }
+
+        /* Spinner styling */
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .copy-instructions {
+            margin-bottom: 15px;
+            padding: 8px;
+            background-color: #fff;
+            border-left: 3px solid #4CAF50;
+            font-size: 0.9em;
+        }
+        
+        .copy-email-btn {
+            padding: 6px 12px;  /* Match padding with email link */
+            margin: 0;  /* Remove margin */
+            line-height: 1.2;  /* Control line height */
+        }
+        
+        .copy-email-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .fallback-email-link {
+            display: inline-block;
+            padding: 6px 12px;  /* Reduced padding */
+            background-color: #2196F3;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            line-height: 1.2;  /* Control line height */
+        }
+        
+        .fallback-email-link:hover {
+            background-color: #0b7dda;
+        }
+        
+        .fallback-section {
+            margin-top: 40px;
+            padding: 20px;
+            border-top: 2px dashed #ccc;
+            background-color: #f7f7f7;
+        }
+        
+        .fallback-section h2 {
+            color: #d32f2f;
+            margin-top: 0;
+        }
+        
+        .full-email-link {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 1em;
+            margin: 10px 0;
+        }
+        
+        .full-email-link:hover {
+            background-color: #45a049;
+        }
+        
+        .fallback-emails {
+            margin-top: 20px;
+        }
+        
+        .fallback-email.fallback {
+            background-color: white;
+            border: 1px solid #ddd;
+        }
+        
+        .fallback-instructions {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-left: 3px solid #4CAF50;
+            font-size: 0.9em;
+        }
+        
+        .fallback-email{
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        
+        .toggle-icon {
+            font-size: 12px;
+            transition: transform 0.3s;
+        }
+        
+        .toggle-active .toggle-icon {
+            transform: rotate(180deg);
+        }
+        
+        .fallback-actions {
+            padding: 10px;  /* Reduced padding */
+            background-color: white;
+            display: flex;
+            gap: 8px;
+            align-items: center;  /* Vertically center items */
+        }
+        
+        #resultModal {
+            overflow-y: auto;
+        }
+        
+        #modalContent {
+            margin: 30px auto;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .email-links {
+            margin-bottom: 30px;
+        }
+        
+        .email-link {
+            display: block;
+            padding: 12px 15px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 1em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .email-link:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="../images/divest-for-palestine.jpeg" alt="Banner">
+    </header>
+    <main>
+        <h1>Stop selling Israeil products</h1>
+        <h2>Email Sainsbury's and demand they stop stocking Israeli products</h2>
+        <div class="explanation">
+            <p>Use this tool to send a pre-written message to Sainsbury's managers.
+            Simple enter your name and this tool will provide a link that 
+            will open a ready to send email using the email client configured 
+            on your machine.</p>
+            <p>It’s always best to personalise, if there are relevant details which would be helpful to
+            mention, please add this to the generated email.</p>
+        </div>
+        <form id="custom-form">
+            <input type="text" id="name" placeholder="Enter your name" required>
+            <button type="submit">Submit</button>
+        </form>
+    </main>
+
+    <!-- Modal structure -->
+    <div id="resultModal">
+        <div id="modalContent">
+            <div id="loading" style="display: none;">
+                <div class="spinner"></div>
+                <div>Loading, please wait...</div>
+            </div>
+            <div id="result"></div>
+            <button id="closeModal">Close</button>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        const emailBodyTemplate = `As%20a%20long%20standing%20customer%2C%20I%20would%20like%20you%20to%20bring%20the%20following%20matter%20at%20your%20AGM%20on%203rd%20July.%20%0A%0APlease%20follow%20the%20Co-op%27s%20example%20in%20observing%20your%20legal%20and%20ethical%20duty%20to%20cease%20stocking%20or%20using%20products%20that%20support%20Israel%E2%80%99s%20grave%20war%20crimes%20of%20Palestinian%20rights.%20%0A%0AIsraeli%20produce%20is%20grown%20in%20illegal%20Israeli%20settlements%20on%20stolen%20Palestinian%20land%2C%20using%20looted%20Palestinian%20resources.%20When%20businesses%20in%20Britain%20sell%20this%20produce%2C%20they%20are%20profiting%20from%20Israel%E2%80%99s%20theft%20of%20Palestinian%20land.%20%0A%0AIn%20addition%2C%20Coca-Cola%E2%80%99s%20exclusive%20franchisee%20in%20Israel%20operates%20a%20regional%20distribution%20centre%20and%20cooling%20houses%20in%20an%20illegal%20Israeli%20settlement%20in%20occupied%20East%20Jerusalem.%20It%20is%20therefore%20helping%20Israel%20to%20solidify%20its%20grip%20on%20stolen%20Palestinian%20land.%20Please%20stock%20an%20apartheid-free%20alternative%2C%20such%20as%20Gaza%20Cola.%0A%0APlease%20join%20many%20other%20businesses%20by%20refraining%20from%20stocking%20or%20using%20Israeli%20produce%20or%20Coca-Cola.%0A%0APlease%20do%20not%20be%20complicit%20in%20Israel%E2%80%99s%20genocide%20in%20Gaza.%20According%20to%20an%20independent%20survey%20the%20death%20toll%20in%20Gaza%20-%20just%20up%20to%20January%20-%20was%2084%2C000%21%20But%20likely%20hundreds%20of%20thousands%20of%20Palestinians%20have%20been%20massacred%2C%20and%20Israeli%20forces%20have%20caused%20incalculable%20devastation.%0A%0AIn%20the%20illegally%20occupied%20West%20Bank%2C%20Israel%20carries%20out%20daily%20military%20invasions%2C%20and%20continues%20to%20forcibly%20expel%20Palestinians%20from%20their%20homes%20and%20land.%20%0A%0AIn%20the%20face%20of%20these%20attacks%2C%20Palestinians%20have%20called%20on%20people%20of%20conscience%20around%20the%20world%20to%20engage%20in%20targeted%20boycotts%20against%20corporations%20that%20enable%20the%20oppression%20that%20they%20face.%20%0A%0AThe%20majority%20of%20the%20British%20public%20are%20upset%20at%20what%20is%20happening%20and%20this%20action%20will%20resonate%20with%20many%2C%20who%20now%20only%20support%20%20businesses%20supporting%20human%20rights%20and%20justice.%0A%0AIn%20summary%2C%20please%20commit%20not%20to%20sell%3A%0A1%29%20Israeli%20produce%20such%20as%20avocados%2C%20peppers%2C%20herbs%20and%20dates.%0A2%29%20Israeli%20products%0A3%29%20Coca-Cola%20products.%0A%0AYours%20sincerely%0A%7Bsignee%7D`;
+        
+        function getEmailBody(signee) {
+            return emailBodyTemplate
+                .replace(encodeURIComponent('{signee}'), encodeURIComponent(signee));
+        }
+        
+        function generateLinks(name) {
+            let html = '';
+        
+            // Simple list of email links
+            html += '<div class="email-links">';
+            var emailBody = getEmailBody(name);
+            var decodedEmailBody = decodeURIComponent(emailBody);
+            html += `<h2>Email was successfuly generated</h2><p>Click 
+                          <a target="_blank" 
+                    href="mailto:agm@sainsburys.co.uk,simon.roberts@sainsburys.co.uk,simon260171@aol.com,martin.scicluna@sainsburys.co.uk,blathnaid.bergin@sainsburys.co.uk,jo.bertram@gmail.com,jo.bertram@sainsburys.co.uk,brian.cassin@sainsburys.co.uk,Jo.harlow@sainsburys.co.uk,Tanuj.kapilashrami@sainsburys.co.uk,Adrian.hennah@sainsburys.co.uk,Keith.weed@sainsburys.co.uk,nick.grant@sainsburys.co.uk?subject=Stop stocking Israeli products&body=${emailBody}">
+                    here to Email Sainsbury's
+                </a>`;
+            html += '</div>';
+        
+            html += `<div class="fallback-section">
+                <span id="link-not-working-title">Link not opening correctly?</span>
+                <div id="link-not-working" style="display:none;">
+                    <p>Some email clients have limitations with long email bodies. If the links above don't work, follow these steps:</p>
+            
+                    <div class="fallback-instructions">
+                        <ol>
+                            <li><strong>Step 1:</strong> Click "Copy email text" to copy the full message</li>
+                            <li><strong>Step 2:</strong> Click "Open email" to launch your email program</li>
+                            <li><strong>Step 3:</strong> Paste the copied text into the email body and send</li>
+                        </ol>
+                    </div>`;
+    
+            html += `<button class="copy-email-btn" data-email="${escapeHtml(decodedEmailBody)}">
+                        Copy email text
+                    </button>
+                    <a class="fallback-email-link" target="_blank"
+                        href="mailto:agm@sainsburys.co.uk,simon.roberts@sainsburys.co.uk,simon260171@aol.com,martin.scicluna@sainsburys.co.uk,blathnaid.bergin@sainsburys.co.uk,jo.bertram@gmail.com,jo.bertram@sainsburys.co.uk,brian.cassin@sainsburys.co.uk,Jo.harlow@sainsburys.co.uk,Tanuj.kapilashrami@sainsburys.co.uk,Adrian.hennah@sainsburys.co.uk,Keith.weed@sainsburys.co.uk,nick.grant@sainsburys.co.uk?subject=Stop stocking Israeli products">
+                        Open email
+                    </a>
+                </div>`;
+        
+            html += '</div></div>';
+        
+            return html;
+        }
+        
+        // Helper function to escape HTML for data attributes
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        jQuery(document).ready(function($) {
+        $('#custom-form').on('submit', function(event) {
+            event.preventDefault();
+
+            var name = $('#name').val();
+
+            // Show the modal and the loading spinner
+            $('#result').html('');  // Clear previous result
+            $('#loading').show();
+            $('#resultModal').css('display', 'flex');  // Show the modal
+
+            var resultHtml = generateLinks(name);
+        
+            // Hide the loading spinner and show the result
+            $('#loading').hide();
+            $('#result').html(resultHtml);
+        });
+        
+        // Copy email to clipboard functionality
+        $(document).on('click', '.copy-email-btn', function() {
+            const emailText = $(this).data('email');
+            const $instructions = $(this).siblings('.copy-instructions');
+            
+            navigator.clipboard.writeText(emailText)
+                .then(() => {
+                    // Show instructions
+                    $instructions.slideDown();
+                    // Change button text temporarily
+                    const $btn = $(this);
+                    const originalText = $btn.text();
+                    $btn.text('Copied! ✓');
+                    setTimeout(() => $btn.text(originalText), 2000);
+                })
+                .catch(err => {
+                    alert('Could not copy email text: ' + err);
+                });
+        });
+
+        $(document).on('click', '#link-not-working-title', function() {
+            console.log('clicked');
+            $('#link-not-working').slideToggle();
+            $(this).toggleClass('toggle-active');
+        });
+        
+        // Close modal button
+        $('#closeModal').on('click', function() {
+            $('#resultModal').css('display', 'none');  // Hide the modal
+        });
+    });
+    </script>
+</body>
+</html>
