@@ -1,0 +1,10 @@
+Dear {mpName} MP,
+
+Insert email text here. Plain text only even for links.
+
+Yours sincerely,  
+{signee}
+{streetAddress}
+{city}
+{postcode}
+{phoneNumber}
