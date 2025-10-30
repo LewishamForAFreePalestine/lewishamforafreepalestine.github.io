@@ -73,7 +73,7 @@ Yours sincerely,
             // Generate comma-separated list of all recipients
             const recipients = picChairs.map(chair => chair.email).join(',');
 
-            return `mailto:${recipients}?bcc=info@lewishampsc.org&subject=${subject}&body=${encodedBody}`;
+            return `mailto:${recipients}?subject=${subject}&body=${encodedBody}`;
         }
 
         function escapeHtml(text) {
