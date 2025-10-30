@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email PIC Chairs</title>
+    <title>Email pension commitee chairs</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <link rel="stylesheet" href="../css/styles.css">
 </head>
@@ -12,10 +12,10 @@
         <img src="../images/header.jpeg" alt="Banner">
     </header>
     <main>
-        <h1>Email Pension Investment Committee Chairs</h1>
+        <h1>Email pension committee chairs</h1>
         <div class="explanation">
             <p>Use this tool to email the chairs of the Pension Investment Committees across the PEPPA boroughs.
-            Simply enter your name and click submit to generate an email to all PIC chairs.</p>
+            Simply enter your name and click submit to generate an email to all chairs.</p>
         </div>
         <form id="custom-form">
             <input type="text" id="fullName" placeholder="Enter your full name" required>
@@ -36,7 +36,6 @@
     </div>
 
     <script type="text/javascript">
-        // PIC Chairs data
         const picChairs = [
             { name: 'Sian Eiles', email: 'sian.eiles@lewisham.gov.uk', borough: 'Lewisham' },
             { name: 'Johar Khan', email: 'cllr.johar.khan@walthamforest.gov.uk', borough: 'Waltham Forest' },
@@ -94,9 +93,9 @@ Yours sincerely,
                 const emailBody = emailTemplate.replace('{signee}', fullName);
 
                 let html = '<h2>Email Generated Successfully</h2>';
-                html += '<p>Click the button below to open your email client with a pre-filled message to all PIC chairs:</p>';
+                html += '<p>Click the button below to open your email client with a pre-filled message to all chairs:</p>';
                 html += '<div class="councillor-links">';
-                html += `<a class="councillor-link" target="_blank" href="${mailtoUrl}">Open Email to All PIC Chairs</a>`;
+                html += `<a class="councillor-link" target="_blank" href="${mailtoUrl}">Open email to all chairs</a>`;
                 html += '</div>';
 
                 html += '<h3>Recipients:</h3>';
