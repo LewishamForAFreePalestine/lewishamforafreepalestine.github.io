@@ -12,12 +12,204 @@
         <img src="../images/divest-for-palestine.jpeg" alt="Banner">
     </header>
     <main>
-        <h1>Thank You For Your Support</h1>
+        <h1>Tell your ward councillors to Divest Now!</h1>
         <div class="explanation">
-            <p>Lewisham Council has passed a motion committing to divesting pension funds from companies operating within occupied territories and with human rights abuses.</p>
-            <p>There are currently no email campaigns running. To stay informed about future campaigns and actions, please <a href="https://tinyurl.us15.list-manage.com/subscribe?u=9818ca931e429fb5e27237ebe&id=9739e46cf0" target="_blank">join our mailing list.</a></p>
-            </div>
+            <p>Use this tool to find and contact your local councillors. Simply
+            enter your postcode and name, and this tool will provide links that 
+            will open a ready to send email using the email client configured 
+            on your machine.</p>
+        </div>
+        <form id="custom-form">
+            <input type="text" id="firstName" placeholder="Enter your first name" required>
+            <input type="text" id="lastName" placeholder="Enter your last name" required>
+            <input type="text" id="query" placeholder="Enter postcode" required>
+            <button type="submit">Submit</button>
+        </form>
+        <div class="explanation">
+            <p>Please forward any responses from your councillor to info@lewishampsc.org</p>
         </div>
     </main>
+
+    <!-- Modal structure -->
+    <div id="resultModal">
+        <div id="modalContent">
+            <div id="loading" style="display: none;">
+                <div class="spinner"></div>
+                <div>Loading, please wait...</div>
+            </div>
+            <div id="result"></div>
+            <button id="closeModal">Close</button>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var councillorsNameToken = '{councillorName}';
+        var wardToken = '{ward}';
+        var signeeToken = '{signee}';
+        var postcodeToken = '{postcode}';
+        const defaultEmailBodyTemplate = `Dear%20%7BcouncillorName%7D%2C%0A%20%0AI%20was%20encouraged%20to%20hear%20that%20the%20Pension%20Investment%20Committee%20%28PIC%29%20has%20agreed%20to%20meet%20with%20representatives%20of%20the%20Lewisham%20Divest%20For%20Palestine%20campaign%20to%20make%20a%20plan%20for%20divestment%20at%20its%20next%20meeting%20on%2025th%20September.%0A%0AThe%20Lewisham%20community%20has%20made%20it%20clear%20that%20it%20supports%20divestment.%20The%20Council%20itself%20reaffirmed%20this%20commitment%20during%20the%20full%20council%20debate%20on%2016th%20July%202025.%20It%20is%20now%20the%20responsibility%20of%20the%20PIC%20to%20act%20on%20that%20commitment%2C%20and%20to%20ensure%20that%20our%20investments%20comply%20with%20international%20law.%20This%20requires%20meaningful%20steps%20towards%20divestment%20-%20not%20merely%20%E2%80%9Cexploring%20options%2C%E2%80%9D%20entering%20into%20endless%20%E2%80%9Cdialogues%2C%E2%80%9D%20or%20delaying%20with%20vague%20commitments.%0A%0AAlthough%20you%20don%E2%80%99t%20sit%20on%20the%20PIC%2C%20as%20my%20representative%20in%20the%20council%2C%20I%20urge%20you%20to%20show%20members%20of%20the%20PIC%20your%20support%20for%20the%20following%20next%20steps%20from%20the%20PIC%20meeting%20on%20the%2025th%20September%3A%20%0A%20%20%20%201.%20A%20clear%20commitment%20to%20divestment%20based%20on%20robust%20exclusionary%20criteria%2C%20such%20as%20those%20provided%20by%20the%20campaign%2C%20and%20a%20transparent%20timeline%20of%20the%20actions%20required%20to%20accomplish%20this.%20This%20should%20include%20full%20disclosure%20of%20the%20mechanisms%20that%20will%20be%20used%20to%20achieve%20divestment%2C%20and%20the%20process%20for%20screening%20all%20future%20investments.%20Applying%20criteria%20such%20as%20the%20UN%20Human%20Rights%20Office%20list%20would%20demonstrate%20to%20campaigners%20that%20the%20Council%20is%20taking%20this%20obligation%20seriously.%0A%20%20%20%202.%20A%20commitment%20to%20engage%20with%20unions%20and%20the%20campaign%20on%20the%20members%E2%80%99%20survey%20to%20ensure%20that%20pension%20members%20have%20a%20real%20opportunity%20to%20shape%20how%20their%20funds%20are%20invested.%0A%20%20%20%203.%20A%20commitment%20to%20community%20accountability%2C%20including%20sending%20a%20representative%20to%20the%20next%20Community%20Meeting%20%28Thursday%2023rd%20October%29%20hosted%20by%20Lewisham%20Divest%20for%20Palestine%2C%20to%20report%20back%20on%20progress%20against%20the%20divestment%20plan.%0A%0AThe%20criteria%20shared%20by%20the%20campaign%20provide%20a%20credible%2C%20internationally%20recognised%20framework%20to%20guide%20this%20process.%20These%20criteria%20call%20for%20excluding%20companies%20that%3A%0A%20%20%20%20-%20Provide%20goods%20or%20services%20enabling%20military%20action%20where%20there%20is%20a%20plausible%20risk%20of%20war%20crimes%2C%20crimes%20against%20humanity%2C%20ethnic%20cleansing%20or%20genocide%20being%20committed%3B%0A%20%20%20%20-%20Provide%20goods%20or%20services%20enabling%20apartheid%3B%0A%20%20%20%20-%20Facilitate%20other%20abuses%20of%20human%20rights%20under%20international%20law%2C%20including%20operating%20in%20occupied%20territories%20or%20exploiting%20occupied%20labour%20and%20captive%20markets%3B%0A%20%20%20%20-%20Are%20domiciled%20in%20or%20operate%20from%20states%20practising%20apartheid.%0A%0AThis%20includes%2C%20but%20is%20not%20limited%20to%2C%20companies%20involved%20in%3A%0A%20%20%20%20-%20Supplying%20arms%2C%20munitions%2C%20AI%2C%20surveillance%2C%20or%20dual-use%20technologies%20to%20Israel%3B%0A%20%20%20%20-%20Providing%20infrastructure%20that%20sustains%20illegal%20occupation%2C%20or%20extracting%20and%20using%20Palestinian%20natural%20resources%20without%20consent%3B%0A%20%20%20%20-%20Contributing%20to%20the%20construction%2C%20expansion%2C%20and%20maintenance%20of%20illegal%20settlements%20and%20related%20infrastructure.%0A%0ACompanies%20meeting%20these%20criteria%20are%20already%20documented%20by%20the%20UN%20Human%20Rights%20Office%2C%20the%20BDS%20movement%E2%80%99s%20corporate%20complicity%20criteria%2C%20and%20the%20Who%20Profits%20Research%20Centre.%0A%0AIt%E2%80%99s%20important%20to%20note%20that%20the%20LCIV%20also%20recognises%20the%20importance%20of%20utilising%20these%20lists%20as%20they%20have%20published%20this%20on%20their%20website%3A%20%0A%0A%E2%80%9CWe%20have%20monitored%20exposure%20to%20companies%20active%20in%20the%20Israel%2FPalestine%20region%20since%202021.%20We%20use%20the%20following%20lists%3A%20United%20Nations%20Human%20Rights%20Office%20of%20the%20High%20Commissioner%E2%80%99s%20A%2FHRC%2F37%2F39%20Report%2C%20the%20WhoProfits%20database%2C%20and%20the%20AFSC%20%28Investigate%29%20watchlist.%20We%20consider%20that%20these%20are%20the%20most%20politically%20balanced%20and%20thorough%20sources%20of%20information%20that%20we%20can%20access.%E2%80%9D%0A%0AI%20expect%20these%20lists%20to%20be%20used%20when%20divesting%20companies%20from%20current%20holdings.%0A%0ALewisham%20residents%2C%20campaigners%2C%20and%20pension%20members%20expect%20PIC%20members%20to%20act%20decisively%2C%20without%20delay%2C%20and%20to%20take%20active%20steps%20towards%20full%20divestment.%0A%0A%20Yours%20sincerely%2C%0A%7Bsignee%7D%0A%7Bpostcode%7D`;
+        const picMemberEmailBodyTemplate = `Dear%20%7BcouncillorName%7D%2C%0A%20%0AI%20was%20encouraged%20to%20hear%20that%20the%20Pension%20Investment%20Committee%20%28PIC%29%20has%20agreed%20to%20meet%20with%20representatives%20of%20the%20Lewisham%20Divest%20For%20Palestine%20campaign%20to%20make%20a%20plan%20for%20divestment%20at%20its%20next%20meeting%20on%2025th%20September.%0A%0AThe%20Lewisham%20community%20has%20made%20it%20clear%20that%20it%20supports%20divestment.%20The%20Council%20itself%20reaffirmed%20this%20commitment%20during%20the%20full%20council%20debate%20on%2016th%20July%202025.%20It%20is%20now%20the%20responsibility%20of%20the%20PIC%20to%20act%20on%20that%20commitment%2C%20and%20to%20ensure%20that%20our%20investments%20comply%20with%20international%20law.%20This%20requires%20meaningful%20steps%20towards%20divestment%20-%20not%20merely%20%E2%80%9Cexploring%20options%2C%E2%80%9D%20entering%20into%20endless%20%E2%80%9Cdialogues%2C%E2%80%9D%20or%20delaying%20with%20vague%20commitments.%0A%0AAs%20a%20member%20of%20the%20PIC%2C%20I%20urge%20you%20to%20demonstrate%20serious%20intent%20by%20supporting%20the%20following%3A%3A%20%0A%20%20%20%201.%20A%20clear%20commitment%20to%20divestment%20based%20on%20robust%20exclusionary%20criteria%2C%20such%20as%20those%20provided%20by%20the%20campaign%2C%20and%20a%20transparent%20timeline%20of%20the%20actions%20required%20to%20accomplish%20this.%20This%20should%20include%20full%20disclosure%20of%20the%20mechanisms%20that%20will%20be%20used%20to%20achieve%20divestment%2C%20and%20the%20process%20for%20screening%20all%20future%20investments.%20Applying%20criteria%20such%20as%20the%20UN%20Human%20Rights%20Office%20list%20would%20demonstrate%20to%20campaigners%20that%20the%20Council%20is%20taking%20this%20obligation%20seriously.%0A%20%20%20%202.%20A%20commitment%20to%20engage%20with%20unions%20and%20the%20campaign%20on%20the%20members%E2%80%99%20survey%20to%20ensure%20that%20pension%20members%20have%20a%20real%20opportunity%20to%20shape%20how%20their%20funds%20are%20invested.%0A%20%20%20%203.%20A%20commitment%20to%20community%20accountability%2C%20including%20sending%20a%20representative%20to%20the%20next%20Community%20Meeting%20%28Thursday%2023rd%20October%29%20hosted%20by%20Lewisham%20Divest%20for%20Palestine%2C%20to%20report%20back%20on%20progress%20against%20the%20divestment%20plan.%0A%0AThe%20criteria%20shared%20by%20the%20campaign%20provide%20a%20credible%2C%20internationally%20recognised%20framework%20to%20guide%20this%20process.%20These%20criteria%20call%20for%20excluding%20companies%20that%3A%0A%20%20%20%20-%20Provide%20goods%20or%20services%20enabling%20military%20action%20where%20there%20is%20a%20plausible%20risk%20of%20war%20crimes%2C%20crimes%20against%20humanity%2C%20ethnic%20cleansing%20or%20genocide%20being%20committed%3B%0A%20%20%20%20-%20Provide%20goods%20or%20services%20enabling%20apartheid%3B%0A%20%20%20%20-%20Facilitate%20other%20abuses%20of%20human%20rights%20under%20international%20law%2C%20including%20operating%20in%20occupied%20territories%20or%20exploiting%20occupied%20labour%20and%20captive%20markets%3B%0A%20%20%20%20-%20Are%20domiciled%20in%20or%20operate%20from%20states%20practising%20apartheid.%0A%0AThis%20includes%2C%20but%20is%20not%20limited%20to%2C%20companies%20involved%20in%3A%0A%20%20%20%20-%20Supplying%20arms%2C%20munitions%2C%20AI%2C%20surveillance%2C%20or%20dual-use%20technologies%20to%20Israel%3B%0A%20%20%20%20-%20Providing%20infrastructure%20that%20sustains%20illegal%20occupation%2C%20or%20extracting%20and%20using%20Palestinian%20natural%20resources%20without%20consent%3B%0A%20%20%20%20-%20Contributing%20to%20the%20construction%2C%20expansion%2C%20and%20maintenance%20of%20illegal%20settlements%20and%20related%20infrastructure.%0A%0ACompanies%20meeting%20these%20criteria%20are%20already%20documented%20by%20the%20UN%20Human%20Rights%20Office%2C%20the%20BDS%20movement%E2%80%99s%20corporate%20complicity%20criteria%2C%20and%20the%20Who%20Profits%20Research%20Centre.%0A%0AIt%E2%80%99s%20important%20to%20note%20that%20the%20LCIV%20also%20recognises%20the%20importance%20of%20utilising%20these%20lists%20as%20they%20have%20published%20this%20on%20their%20website%3A%20%0A%0A%E2%80%9CWe%20have%20monitored%20exposure%20to%20companies%20active%20in%20the%20Israel%2FPalestine%20region%20since%202021.%20We%20use%20the%20following%20lists%3A%20United%20Nations%20Human%20Rights%20Office%20of%20the%20High%20Commissioner%E2%80%99s%20A%2FHRC%2F37%2F39%20Report%2C%20the%20WhoProfits%20database%2C%20and%20the%20AFSC%20%28Investigate%29%20watchlist.%20We%20consider%20that%20these%20are%20the%20most%20politically%20balanced%20and%20thorough%20sources%20of%20information%20that%20we%20can%20access.%E2%80%9D%0A%0AI%20expect%20these%20lists%20to%20be%20used%20when%20divesting%20companies%20from%20current%20holdings.%0A%0ALewisham%20residents%2C%20campaigners%2C%20and%20pension%20members%20expect%20PIC%20members%20to%20act%20decisively%2C%20without%20delay%2C%20and%20to%20take%20active%20steps%20towards%20full%20divestment.%0A%0A%20Yours%20sincerely%2C%0A%7Bsignee%7D%0A%7Bpostcode%7D`;
+        const emailBodyTemplateOverride = {
+            'sian.eiles@lewisham.gov.uk': picMemberEmailBodyTemplate,
+            'mark.ingleby@lewisham.gov.uk': picMemberEmailBodyTemplate,
+            'louise.krupski@lewisham.gov.uk': picMemberEmailBodyTemplate,
+            'john.muldoon@lewisham.gov.uk': picMemberEmailBodyTemplate,
+            'james.royston@lewisham.gov.uk': picMemberEmailBodyTemplate,
+            'tauseef.anwar@lewisham.gov.uk': picMemberEmailBodyTemplate,
+            'eva.kestner@lewisham.gov.uk': picMemberEmailBodyTemplate,
+            'liam.shrivastava@lewisham.gov.uk': picMemberEmailBodyTemplate,
+        }
+        function getFullName(firstname, lastname) {
+            return `${firstname} ${lastname}`;
+        }
+        function getEmailBody(councillor, ward, signee, postcode) {
+            var emailBodyTemplate = emailBodyTemplateOverride[councillor.email.toLowerCase()] || defaultEmailBodyTemplate;
+            
+            return emailBodyTemplate.replace(encodeURIComponent(councillorsNameToken), encodeURIComponent(councillor.name))
+                .replace(encodeURIComponent(wardToken), encodeURIComponent(ward))
+                .replace(encodeURIComponent(signeeToken), encodeURIComponent(signee))
+                .replace(encodeURIComponent(postcodeToken), encodeURIComponent(postcode));
+        }
+
+        function generateMailingListUrl(firstname, lastname, ward) {
+           return `https://tinyurl.us15.list-manage.com/subscribe?u=9818ca931e429fb5e27237ebe&id=9739e46cf0&FNAME=${encodeURIComponent(firstname)}&LNAME=${encodeURIComponent(lastname)}&WARD=${encodeURIComponent(ward)}`;
+        }
+
+        function generateLinks(councillors, ward, firstname, lastname, postcode) {
+            const fullname = getFullName(firstname, lastname);
+            let html = '';
+
+            // First show the regular links with full mailto
+            html += '<p>We found ' + councillors.length + ' councillors for the ward of ' + ward +
+                    '.</p><p>Please click on each councillor below to send them an email:</p>';
+
+            // Simple list of email links
+            html += '<div class="councillor-links">';
+            councillors.forEach(function(councillor) {
+                var emailBody = getEmailBody(councillor, ward, fullname, postcode);  // Add postcode here
+                html += `<a class="councillor-link" target="_blank" 
+                        href="mailto:${councillor.email}?bcc=info@lewishampsc.org&subject=PIC must commit to decisive divestment at 25th September meeting&body=${emailBody}">
+                        Email ${councillor.name}
+                    </a>`;
+            });
+            html += `<p>Click <a target="_blank" href="${generateMailingListUrl(firstname,lastname,ward)}" id="mailingListLink">here</a> to join our mailing list and stay updated on our campaign.</p>`;
+            html += '</div>';
+        
+            // Fallback section remains the same
+            html += `<div class="fallback-section">
+                <h2>Links not opening correctly?</h2>
+                <p>Some email clients have limitations with long email bodies. If the links above don't work, follow these steps:</p>
+        
+                <div class="fallback-instructions">
+                    <ol>
+                        <li><strong>Step 1:</strong> Click a councillor's name below</li>
+                        <li><strong>Step 2:</strong> Click "Copy email text" to copy the full message</li>
+                        <li><strong>Step 3:</strong> Click "Open email" to launch your email program</li>
+                        <li><strong>Step 4:</strong> Paste the copied text into the email body and send</li>
+                    </ol>
+                </div>
+        
+                <div class="fallback-councillors">`;
+        
+            councillors.forEach(function(councillor) {
+                var emailBody = getEmailBody(councillor, ward, fullname, postcode);
+                var decodedEmailBody = decodeURIComponent(emailBody);
+        
+                html += `<div class="fallback-councillor">
+                    <div class="councillor-name" data-councillor-id="${councillor.email}">
+                        ${councillor.name} <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="councillor-actions" id="actions-${councillor.email.replace(/[@.]/g, '-')}" style="display:none;">
+                        <button class="copy-email-btn" data-email="${escapeHtml(decodedEmailBody)}">
+                            Copy email text
+                        </button>
+                        <a class="email-link" target="_blank"
+                           href="mailto:${councillor.email}?bcc=info@lewishampsc.org&subject=PIC must commit to decisive divestment at 25th September meeting">
+                           Open email
+                        </a>
+                    </div>
+                </div>`;
+            });
+        
+            html += '</div></div>';
+        
+            return html;
+        }
+        
+        // Helper function to escape HTML for data attributes
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        jQuery(document).ready(function($) {
+        $('#custom-form').on('submit', function(event) {
+            event.preventDefault();
+
+            const firstname = $('#firstName').val().trim();
+            const lastname = $('#lastName').val().trim();
+            var query = $('#query').val();
+            var url = 'https://script.google.com/macros/s/AKfycbzN7FhBAz0U4Kl3PnpFI79_NsnM4cfLHZsDIAz2_zcWBsXs1sPkDUF0Z6OTA8zA4Tkb/exec?postcode=' + encodeURIComponent(query);
+
+            // Show the modal and the loading spinner
+            $('#result').html('');  // Clear previous result
+            $('#loading').show();
+            $('#resultModal').css('display', 'flex');  // Show the modal
+
+            $.get(url, function(response) {
+                var ward = response.ward;
+                var councillors = response.councillors;
+                var resultHtml = '';
+            
+                if (!ward) {
+                    resultHtml = '<p>We could not find the postcode in our database.</p><p>This tool only works with postcodes in the London Borough of Lewisham, please ensure you entered a valid Lewisham postcode.</p>';
+                } else {
+                    resultHtml = generateLinks(councillors, ward, firstname, lastname, query);
+                }
+            
+                // Hide the loading spinner and show the result
+                $('#loading').hide();
+                $('#result').html(resultHtml);
+            });
+        });
+        
+        // Copy email to clipboard functionality
+        $(document).on('click', '.copy-email-btn', function() {
+            const emailText = $(this).data('email');
+            const councillorName = $(this).data('name');
+            const $instructions = $(this).siblings('.copy-instructions');
+            
+            navigator.clipboard.writeText(emailText)
+                .then(() => {
+                    // Show instructions
+                    $instructions.slideDown();
+                    // Change button text temporarily
+                    const $btn = $(this);
+                    const originalText = $btn.text();
+                    $btn.text('Copied! ✓');
+                    setTimeout(() => $btn.text(originalText), 2000);
+                })
+                .catch(err => {
+                    alert('Could not copy email text: ' + err);
+                });
+        });
+
+        $(document).on('click', '.councillor-name', function() {
+            const councillorId = $(this).data('councillor-id');
+            const actionsId = '#actions-' + councillorId.replace(/[@.]/g, '-');
+            $(actionsId).slideToggle(200);
+            $(this).toggleClass('toggle-active');
+        });
+        
+        // Close modal button
+        $('#closeModal').on('click', function() {
+            $('#resultModal').css('display', 'none');  // Hide the modal
+        });
+    });
+    </script>
 </body>
 </html>
