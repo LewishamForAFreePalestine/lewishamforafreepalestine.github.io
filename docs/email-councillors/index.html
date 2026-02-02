@@ -104,9 +104,9 @@ Yours sincerely,
                 html += '</ul>';
 
                 html += '<p>Click the button below to open your email client with a pre-filled message:</p>';
-                html += `<button class="copy-email-btn" id="openEmailBtn" onclick="window.open('${mailtoUrl}', '_blank')" style="background-color: #28a745;">
+                html += `<a id="openEmailLink" href="${mailtoUrl}">
                     Open email to Councillor Sian Eiles
-                </button>`;
+                </a>`;
 
                 // Fallback section
                 html += `<div class="fallback-section">
