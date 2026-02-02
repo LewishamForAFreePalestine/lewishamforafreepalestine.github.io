@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email pension committee chairs</title>
+    <title>Contact Your Councillors</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
     <header>
-        <img src="../images/peppa-header.jpeg" alt="Banner">
+        <img src="../images/divest-for-palestine.jpeg" alt="Banner">
     </header>
     <main>
-        <h1>Email pension committee chairs</h1>
+        <h1>Email the Pension Investments Committee chair</h1>
         <div class="explanation">
-            <p>Use this tool to email the chairs of the pension committees across the PEPPA boroughs.
-            Simply enter your name and click submit to generate an email to all chairs.</p>
+            <p>Use this tool to email the chair of the pension committee in the borough of Lewisham.
+            Simply enter your name and click submit to generate an email to Councillor Sian Eiles.</p>
         </div>
         <form id="custom-form">
             <input type="text" id="fullName" placeholder="Enter your full name" required>
@@ -38,28 +38,31 @@
     <script type="text/javascript">
         const picChairs = [
             { name: 'Sian Eiles', email: 'sian.eiles@lewisham.gov.uk', borough: 'Lewisham' },
-            { name: 'Johar Khan', email: 'cllr.johar.khan@walthamforest.gov.uk', borough: 'Waltham Forest' },
-            { name: 'Mandy Anderson', email: 'Councillormandy.anderson@havering.gov.uk', borough: 'Havering' },
-            { name: 'Cryss Mennaceur', email: 'cryss.mennaceur@sutton.gov.uk', borough: 'Sutton' },
-            { name: 'Rishikesh Chakraborty', email: 'cllr.R.Chakraborty@barnet.gov.uk', borough: 'Barnet' }
         ];
 
         // Email template from body.docx
-        const emailTemplate = `Dear Sir/Madam,
+        const emailTemplate = `Dear Sian,
 
-I hope this finds you well. I write in regard to our borough's pension scheme investments in the 'Passive Equity Progressive Paris-Aligned' (PEPPA) fund - managed by the London CIV (LCIV).
+I am writing to you with urgency and profound disappointment regarding the Lewisham Pension Investment Committee’s (PIC) failure to implement the divestment motion passed by Lewisham Council in July 2024. This motion committed the council to divesting its Local Government Pension Scheme (LGPS) holdings from companies complicit in Israeli human rights abuses against Palestinians.
 
-I understand that on 4th November you will be meeting with the other pension committee chairs of the five boroughs invested in PEPPA, and a representative from LCIV, to discuss the issue of divesting from PEPPA's investments in companies complicit in genocide, apartheid, and human rights abuses.
+Time is running out. With the fund due to be pooled by 1 April 2026, the window to enact this democratic decision, in line with Lewisham’s stated values and legal obligations, is closing rapidly.
 
-I urge you to use this meeting to agree to an exclusions framework for these complicit companies, to be applied to PEPPA. I am aware that a suitable exclusions framework, prepared with the support of pensions lawyers, has already been shared with you by the Lewisham divestment campaign.
+I understand there is currently talk of using a shorter UN list as a basis for divestment. This would maintain Lewisham's investment in companies such as Palantir - a company that has provided the Israeli military with advanced targeting capabilities allowing drone-fired missiles to target journalists, aid workers and civilians; Palantir also has a contract with the Israel Defence Ministry specifically for “population management” in the Occupied Palestinian Territories, facilitating a system of control and dehumanisation.
 
-I remind you that, through PEPPA, pension holders' money is invested in, amongst others, a company providing AI targeting systems to Israel's military, actively facilitating genocide. And despite longstanding judgements on the illegality of Israel's settlements under international law, pension holders' money is still invested in Israeli banks actively funding the expansion of illegal settlements. Furthermore, our borough invests in companies that have been repeatedly identified and repeatedly called on by the UN Human Rights Office to "take appropriate action to address the adverse human rights impacts" of their activities in Palestine. It is beyond the comprehension of many residents and pension holders that anyone would invest someone else's money - on their behalf but against their will - in companies facilitating some of the world's worst human rights abuses. Investments that - by contravening international law - may themselves be risky.
+There is no need for debate or discussion about which lists to use or which companies to exclude. Your own fund manager, London CIV (LCIV), has explicitly stated that the United Nations Human Rights Office of the High Commissioner’s A/HRC/37/39 Report, the WhoProfits database, and the AFSC (Investigate) watchlist are “the most politically balanced and thorough sources of information that we can access.”
 
-I understand the challenges of 'passive funds' and that 'things move slowly in pensions', but after two years of Israel's genocide, it beggars belief that our boroughs have not removed pension holders' money from these companies or even set out a clear plan for doing so.
+And regardless of the detail of lists, despite the PIC’s own recognition of companies involved in human rights abuses, not a single company has been excluded from Lewisham's investments.
 
-I am asking you to do everything in your power to agree on an exclusions framework in the meeting on 4th November. And whilst this would be a positive interim step, I'd also ask you to use your influence to press LCIV for complete divestment across London's pension schemes in the longer term.
+The situation is clear:
+    • The Council has democratically mandated divestment.
+    • The PIC’s own investment manager has endorsed three specific sources for identifying problematic companies.
+    • No legal barrier exists to divesting from companies involved in documented human rights violations; in fact, it is a core duty.
+Your legacy as PIC Chair is now on the line. The residents of Lewisham are watching. We see the gap between the council’s motions and the committee's actions. We are aware that the pooling deadline of 1 April represents a point of no return for this divestment pledge.
 
-With local elections around the corner next year, I want to rest assured that our borough can demonstrate the moral leadership this situation requires. These messages are being sent to the chairs of all five PEPPA boroughs, on behalf of the united Barnet, Havering, Lewisham, Sutton, and Waltham Forest resident-led divestment campaigns.
+Council elections are upcoming in May. To be clear, this is a voting issue for me. I urge you in the strongest possible terms: immediately instruct officers and the LCIV to begin the process of divesting from all companies identified by the combined criteria of the UN OHCHR A/HRC/37/39 Report, the WhoProfits database, and the AFSC Investigate watchlist. Any future pooling of funds into “pillars” should also use these three lists as criteria as to what companies to divest from. Anything else may lead to the farce of companies such a Palantir - actively facilitating genocide - being considered ethical investments.
+
+Honour the council’s motion. Uphold international law. Fulfil your fiduciary duty. Agree to use all three lists. Act before the 1 April pooling deadline makes a mockery of Lewisham’s commitment to justice.
+The time for delays, excuses, and capitulation is over. The time for action is now.
 
 Yours sincerely,
 {signee}`;
@@ -67,12 +70,12 @@ Yours sincerely,
         function generateEmail(fullName) {
             const emailBody = emailTemplate.replace('{signee}', fullName);
             const encodedBody = encodeURIComponent(emailBody);
-            const subject = encodeURIComponent('PEPPA Divestment - 4th November Meeting');
+            const subject = encodeURIComponent('Cllr Sian Eiles- the time for action is now.');
 
             // Generate comma-separated list of all recipients
             const recipients = picChairs.map(chair => chair.email).join(',');
 
-            return `mailto:${recipients}?subject=${subject}&body=${encodedBody}`;
+            return `mailto:${recipients}?bcc=info@lewishampsc.org&subject=${subject}&body=${encodedBody}`;
         }
 
         function escapeHtml(text) {
@@ -94,17 +97,16 @@ Yours sincerely,
 
                 let html = '<h2>Email Generated Successfully</h2>';
 
-                html += '<h3>Recipients:</h3>';
                 html += '<ul style="list-style-type: none;">';
                 picChairs.forEach(chair => {
                     html += `<li><strong>${chair.name}</strong> - ${chair.borough}</li>`;
                 });
                 html += '</ul>';
 
-                html += '<p>Click the button below to open your email client with a pre-filled message to all chairs:</p>';
-                html += `<button class="copy-email-btn" id="openEmailBtn" onclick="window.open('${mailtoUrl}', '_blank')" style="background-color: #28a745;">
-                    Open email to all chairs
-                </button>`;
+                html += '<p>Click the button below to open your email client with a pre-filled message:</p>';
+                html += `<a id="openEmailLink" href="${mailtoUrl}">
+                    Open email to Councillor Sian Eiles
+                </a>`;
 
                 // Fallback section
                 html += `<div class="fallback-section">
@@ -114,7 +116,7 @@ Yours sincerely,
                         Copy Email Text
                     </button>
                     <p style="margin-top: 10px;">Then manually create an email to: ${picChairs.map(c => c.email).join(', ')}</p>
-                    <p>Subject: PEPPA Divestment - 4th November Meeting</p>
+                    <p>Subject: Cllr Sian Eiles- the time for action is now.</p>
                 </div>`;
 
                 $('#result').html(html);
