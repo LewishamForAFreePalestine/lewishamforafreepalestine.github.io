@@ -57,7 +57,7 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const text = await response.text();
-                defaultEmailBodyTemplate = encodeURIComponent(text);
+                defaultEmailBodyTemplate = text;
             } catch (error) {
                 console.error('Error loading email body:', error);
                 alert('Error loading email template. Please make sure body.txt exists in this directory.');
@@ -234,16 +234,16 @@
                 if (email) {
                     // Create email body by replacing tokens
                     let emailBody = defaultEmailBodyTemplate
-                        .replace(new RegExp(mpNameToken, 'g'), encodeURIComponent(mpName))
-                        .replace(new RegExp(constituencyToken, 'g'), encodeURIComponent(constituency))
-                        .replace(new RegExp(signeeToken, 'g'), encodeURIComponent(signee))
-                        .replace(new RegExp(streetAddressToken, 'g'), encodeURIComponent(streetAddress))
-                        .replace(new RegExp(cityToken, 'g'), encodeURIComponent(city))
-                        .replace(new RegExp(phoneNumberToken, 'g'), encodeURIComponent(phoneNumber))
-                        .replace(new RegExp(postcodeToken, 'g'), encodeURIComponent(postcode));
+                        .replace(new RegExp(mpNameToken, 'g'), mpName)
+                        .replace(new RegExp(constituencyToken, 'g'), constituency)
+                        .replace(new RegExp(signeeToken, 'g'), signee)
+                        .replace(new RegExp(streetAddressToken, 'g'), streetAddress)
+                        .replace(new RegExp(cityToken, 'g'), city)
+                        .replace(new RegExp(phoneNumberToken, 'g'), phoneNumber)
+                        .replace(new RegExp(postcodeToken, 'g'), postcode);
 
                     const subject = encodeURIComponent(`Contact from Constituent`);
-                    const mailtoLink = `mailto:${email}?subject=${subject}&body=${emailBody}`;
+                    const mailtoLink = `mailto:${email}?subject=${subject}&body=${encodeURIComponent(emailBody)}`;
 
                     html += `<p><strong>Email:</strong> ${email}</p>`;
                     html += `<p><a href="${mailtoLink}" class="email-link">📧 Send Email to ${mpName}</a></p>`;
@@ -277,15 +277,15 @@
 
                     // Create email body text for copying (decoded for display)
                     let emailBody = defaultEmailBodyTemplate
-                        .replace(new RegExp(mpNameToken, 'g'), encodeURIComponent(mpName))
-                        .replace(new RegExp(constituencyToken, 'g'), encodeURIComponent(constituency))
-                        .replace(new RegExp(signeeToken, 'g'), encodeURIComponent(signee))
-                        .replace(new RegExp(streetAddressToken, 'g'), encodeURIComponent(streetAddress))
-                        .replace(new RegExp(cityToken, 'g'), encodeURIComponent(city))
-                        .replace(new RegExp(phoneNumberToken, 'g'), encodeURIComponent(phoneNumber))
-                        .replace(new RegExp(postcodeToken, 'g'), encodeURIComponent(postcode));
+                        .replace(new RegExp(mpNameToken, 'g'), mpName)
+                        .replace(new RegExp(constituencyToken, 'g'), constituency)
+                        .replace(new RegExp(signeeToken, 'g'), signee)
+                        .replace(new RegExp(streetAddressToken, 'g'), streetAddress)
+                        .replace(new RegExp(cityToken, 'g'), city)
+                        .replace(new RegExp(phoneNumberToken, 'g'), phoneNumber)
+                        .replace(new RegExp(postcodeToken, 'g'), postcode);
 
-                    const decodedEmailBody = decodeURIComponent(emailBody);
+                    const decodedEmailBody = emailBody;
                     const subject = `Contact from Constituent`;
                     const simpleMailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}`;
 
