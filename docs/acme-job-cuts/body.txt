@@ -1,0 +1,18 @@
+Dear {mpName} MP,
+
+I am writing to you as a constituent working at ACME.
+
+I am deeply concerned about the devastating job cuts and contract changes that ACME management have announced. As of last week, our organisation has informed workers that our jobs will either be eliminated or downgraded to poorer contracts with less pay and fewer protections.
+
+These attacks on workers will not only harm employees like myself but will also damage the quality of service our customers receive. Workers are already under immense pressure, and these cuts will force remaining staff to take on even heavier workloads while facing insecurity.
+
+I urge you to raise this matter in Parliament and call on the Government to intervene. Companies must be properly regulated so that workers can be treated fairly.
+
+I would welcome any support you can offer in fighting these job cuts at ACME.
+
+Yours sincerely,
+{signee}
+{streetAddress}
+{city}
+{postcode}
+{phoneNumber}

@@ -4,6 +4,8 @@ This template allows you to create a customizable tool for contacting MPs with a
 
 You can open a pull request to this repository to host under https://lewishamforafreepalestine.github.io/ or copy the files into your own web hosting.
 
+**Live example:** https://lewishamforafreepalestine.github.io/acme-job-cuts/
+
 ## How to Use This Template
 
 1. **Copy the directory**: Copy the entire `templates/contact-mp/` directory to the `docs/` folder with your campaign name (e.g., `docs/your-campaign-name/`)

@@ -10,13 +10,30 @@ body {
 header {
     width: 100%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
 }
-header img {
+.header-banner {
     width: 100%;
     max-width: 840px;
     height: auto;
+}
+.header-text {
+    background-color: #003366;
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+    box-sizing: border-box;
+}
+.header-text h2 {
+    margin: 0 0 5px 0;
+    font-size: 1.4em;
+}
+.header-text p {
+    margin: 0;
+    font-size: 1em;
 }
 main {
     max-width: 800px;
@@ -30,8 +47,15 @@ h1 {
 }
 .explanation {
     margin-bottom: 20px;
-    font-size: 1.2em;
-    color: #666;
+    font-size: 1.1em;
+    color: #555;
+    line-height: 1.6;
+}
+.alert-box {
+    background-color: #e8f0f8;
+    border-left: 4px solid #003366;
+    padding: 15px;
+    margin-bottom: 20px;
 }
 .customise-box {
     background-color: #fffbe6;
@@ -68,16 +92,15 @@ button {
     padding: 10px 20px;
     font-size: 1em;
     color: white;
-    background-color: #4CAF50;
+    background-color: #003366;
     border: none;
     cursor: pointer;
     margin-top: 10px;
 }
 button:hover {
-    background-color: #45a049;
+    background-color: #004080;
 }
 
-/* Modal styling */
 #resultModal {
     display: none;
     position: fixed;
@@ -100,7 +123,7 @@ button:hover {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 #closeModal {
-    background: #f44336;
+    background: #666;
     color: white;
     border: none;
     padding: 8px 16px;
@@ -110,13 +133,12 @@ button:hover {
     border-radius: 4px;
 }
 #closeModal:hover {
-    background: #d32f2f;
+    background: #444;
 }
 
-/* Spinner styling */
 .spinner {
     border: 4px solid #f3f3f3;
-    border-top: 4px solid #3498db;
+    border-top: 4px solid #003366;
     border-radius: 50%;
     width: 30px;
     height: 30px;
@@ -129,7 +151,7 @@ button:hover {
     100% { transform: rotate(360deg); }
 }
 
-.councillor-email {
+.mp-result {
     margin-bottom: 25px;
     border: 1px solid #eee;
     padding: 15px;
@@ -137,43 +159,43 @@ button:hover {
     background-color: #f9f9f9;
 }
 
-.councillor-email h3 {
+.mp-result h3 {
     margin-top: 0;
     margin-bottom: 10px;
     color: #333;
 }
 
-.copy-instructions {
-    margin-bottom: 15px;
-    padding: 8px;
-    background-color: #fff;
-    border-left: 3px solid #4CAF50;
-    font-size: 0.9em;
+.mp-result p {
+    margin: 5px 0;
+    color: #555;
 }
 
 .copy-email-btn {
-    padding: 6px 12px;  /* Match padding with email link */
-    margin: 0;  /* Remove margin */
-    line-height: 1.2;  /* Control line height */
+    padding: 6px 12px;
+    margin: 0;
+    line-height: 1.2;
+    background-color: #003366;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
-
 .copy-email-btn:hover {
-    background-color: #45a049;
+    background-color: #004080;
 }
 
 .email-link {
     display: inline-block;
-    padding: 6px 12px;  /* Reduced padding */
-    background-color: #2196F3;
+    padding: 6px 12px;
+    background-color: #333;
     color: white;
     text-decoration: none;
     border-radius: 4px;
     font-size: 0.9em;
-    line-height: 1.2;  /* Control line height */
+    line-height: 1.2;
 }
-
 .email-link:hover {
-    background-color: #0b7dda;
+    background-color: #555;
 }
 
 .fallback-section {
@@ -184,50 +206,39 @@ button:hover {
 }
 
 .fallback-section h2 {
-    color: #d32f2f;
+    color: #333;
     margin-top: 0;
-}
-
-.full-email-link {
-    display: inline-block;
-    padding: 10px 15px;
-    background-color: #4CAF50;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-    font-size: 1em;
-    margin: 10px 0;
-}
-
-.full-email-link:hover {
-    background-color: #45a049;
-}
-
-.fallback-councillors {
-    margin-top: 20px;
-}
-
-.councillor-email.fallback {
-    background-color: white;
-    border: 1px solid #ddd;
 }
 
 .fallback-instructions {
     margin-bottom: 20px;
     padding: 10px;
     background-color: #fff;
-    border-left: 3px solid #4CAF50;
+    border-left: 3px solid #003366;
     font-size: 0.9em;
 }
 
-.fallback-councillor, .fallback-mp {
+.fallback-instructions ol {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.fallback-instructions li {
+    margin-bottom: 5px;
+}
+
+.fallback-mps {
+    margin-top: 20px;
+}
+
+.fallback-mp {
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
     overflow: hidden;
 }
 
-.councillor-name, .mp-name {
+.mp-name {
     padding: 10px 15px;
     background-color: #f0f0f0;
     cursor: pointer;
@@ -237,7 +248,7 @@ button:hover {
     align-items: center;
 }
 
-.councillor-name:hover {
+.mp-name:hover {
     background-color: #e0e0e0;
 }
 
@@ -250,16 +261,12 @@ button:hover {
     transform: rotate(180deg);
 }
 
-.councillor-actions, .mp-actions {
-    padding: 10px;  /* Reduced padding */
+.mp-actions {
+    padding: 10px;
     background-color: white;
     display: flex;
     gap: 8px;
-    align-items: center;  /* Vertically center items */
-}
-
-#resultModal {
-    overflow-y: auto;
+    align-items: center;
 }
 
 #modalContent {
@@ -268,19 +275,14 @@ button:hover {
     overflow-y: auto;
 }
 
-.councillor-links, .mp-result {
-    margin-bottom: 30px;
+footer {
+    max-width: 800px;
+    padding: 20px;
+    text-align: center;
+    color: #666;
+    font-size: 0.9em;
 }
 
-.councillor-link {
-    display: block;
-    margin-bottom: 8px;
-}
-
-.mp-result {
-    padding-bottom: 15px;
-}
-
-.fallback-mps {
-    margin-top: 20px;
+footer a {
+    color: #003366;
 }
